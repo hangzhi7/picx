@@ -2,13 +2,14 @@ name: deploy
 
 on:
   push:
-    branches: [master]
+    branches:
+      - master
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Setup Node.js v14.x
         uses: actions/setup-node@v1
@@ -24,8 +25,10 @@ jobs:
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
+          external_repository: hangzhi7/picx
+          personal_token: ${{ secrets.PERSONAL_TOKEN }}
           publish_dir: ./dist
-          github_token: ${{ secrets.GH_PAGES_DEPLOY }}
-          user_name: ${{ secrets.MY_USER_NAME }}
-          user_email: ${{ secrets.MY_USER_EMAIL }}
-          commit_message: Update PicX
+          publish_branch: gh-pages
+          force_orphan: true
+          full_commit_message: ${{ github.event.head_commit.message }}
+          cname: 'img.mzfqy.site'
